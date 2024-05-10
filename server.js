@@ -9,7 +9,7 @@ const jwt=require('jsonwebtoken');
 const key='vbxckjvfvdfiugekj8943fbhbdv98fh348f3ef8ehndfuig4renf438hcn4398fh349hr4n589ghun9vbeefuig3b8f4378';
 const bcrypt=require('bcrypt');
 
-const con=mysql.createConnection({
+let con=mysql.createConnection({
     host:'localhost',
     database:"mydb",
     user:'root',
