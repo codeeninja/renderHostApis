@@ -15,13 +15,37 @@ const con=mysql.createConnection({
     user:'root',
     password:''
 });
-con.connect((err)=>{
-    if(err){
-        console.log(err);
-    }else{
-        console.log("Connection SuccessFull");
-    }
-});
+// con.connect((err)=>{
+//     if(err){
+//         console.log(err);
+//     }else{
+//         console.log("Connection SuccessFull");
+//     }
+// });
+
+function handleDisconnect() {
+    con = mysql.createConnection(con.config);
+  
+    con.connect((err) => {
+      if (err) {
+        console.error('Error connecting to MySQL:', err);
+        setTimeout(handleDisconnect, 2000); // Retry connection after 2 seconds
+      } else {
+        console.log('Reconnected to MySQL');
+      }
+    });
+  
+    con.on('error', (err) => {
+      if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        console.error('Connection lost, reconnecting...', err);
+        handleDisconnect(); // Reconnect on connection loss
+      } else {
+        throw err; // Throw other errors
+      }
+    });
+  }
+  
+  handleDisconnect(); 
 
 app.get('/',(req,resp)=>{
     const sqlSel='select *from employees';
